@@ -1,0 +1,19 @@
+{
+
+    "manifest_version": 2,
+    "name": "FFTextWrap",
+    "version": "1.0",
+  
+    "description": "Personal project for adding textwrap to Firefox",
+  
+    "icons": {
+      "48": "icons/logo-48.png"
+    },
+  
+    "content_scripts": [
+      {
+        "js": ["borderify.js"]
+      }
+    ]
+  
+  }
