@@ -4,15 +4,17 @@
     "name": "FFTextWrap",
     "version": "1.0",
   
-    "description": "Personal project for adding textwrap to Firefox",
+    "description": "Personal project for adding textwrap to Firefox. For Firefox Mobile users on desktop sites.",
+    "homepage_url": " https://github.com/siyangqiu/FFTextWrap",
   
     "icons": {
       "48": "icons/logo-48.png"
     },
-  
+
     "content_scripts": [
       {
-        "js": ["borderify.js"]
+        "matches": ["<all_urls>"],
+        "js": ["FFTextWrap.js"]
       }
     ]
   
