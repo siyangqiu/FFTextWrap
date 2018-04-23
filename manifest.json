@@ -4,7 +4,7 @@
     "name": "FFTextWrap",
     "version": "1.0",
   
-    "description": "Personal project for adding textwrap to Firefox. For Firefox Mobile users on desktop sites.",
+    "description": "Personal project for adding textwrap to Fennec Firefox (Firefox on Android). Compared to other text wrap/reflow add-ons on AMO, this reflows the entire page based on touch events - the page will reflow as soon as you finish your pinch to zoom! No more clicking on text elements!",
     "homepage_url": " https://github.com/siyangqiu/FFTextWrap",
   
     "icons": {
