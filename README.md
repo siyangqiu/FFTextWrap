@@ -3,8 +3,8 @@ Personal project for adding textwrap to Firefox on Android. Compared to other te
 
 Note: to sideload this webextension, you will need to add the following into manifest.json:
 
-"applications": {
+<pre>"applications": {
     "gecko": {
     "id": "<some sort of id>"
     }
-}
+}</pre>
