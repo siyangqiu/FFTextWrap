@@ -1,9 +1,8 @@
 function saveOptions(e) {
     e.preventDefault();
-    var values = [];
     browser.storage.local.set({
         viewTracking: document.querySelector("#ViewTracking").checked,
-        trackLocation: document.querySelector("#TrackLocation").value,
+        trackElement: document.querySelector("#TrackElement").value,
         margin: parseInt(document.querySelector("#Margin").value),
         p: document.querySelector("#p").checked,
         li: document.querySelector("#li").checked,
@@ -22,11 +21,11 @@ function saveOptions(e) {
   }
   
 function restoreOptions() {
-    var gettingItem = browser.storage.local.get(['viewTracking','trackLocation','margin','p','li','ul','a','h1','h2','h3','h4','h5','h6','tr','td','th']);
+    var gettingItem = browser.storage.local.get(['viewTracking','trackElement','margin','p','li','ul','a','h1','h2','h3','h4','h5','h6','tr','td','th']);
     gettingItem.then(onGetSettings,onError);
     function onGetSettings(res) {
         document.querySelector("#ViewTracking").checked = res.viewTracking || true;
-        document.querySelector("#TrackLocation").value = res.trackLocation || 'top';
+        document.querySelector("#TrackElement").value = res.trackElement || 'top';
         document.querySelector("#Margin").value = res.margin || 10;
         document.querySelector("#p").checked = res.p || true;
         document.querySelector("#li").checked = res.li || true;

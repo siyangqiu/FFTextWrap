@@ -14,7 +14,7 @@ var init = function () {    //Setup: 1. create style tag for later CSS injection
     styleNode.id = "FFTW";
     document.getElementsByTagName('head')[0].appendChild(styleNode);
 
-    var getSettings = browser.storage.local.get("settings");
+    var getSettings = browser.storage.local.get(['viewTracking','trackLocation','margin','p','li','ul','a','h1','h2','h3','h4','h5','h6','tr','td','th']);
     getSettings.then(onGetSettings, onError);
 };
 
@@ -28,26 +28,23 @@ var resize = function() {   //Call this function to reflow page.
     }
 };
 
-function onGetSettings(item) { //After getting settings, override default parameters
-    if (item != null){
-        enableTrack = item.settings[0];
+function onGetSettings(res) { //After getting settings, override default parameters
+    if (res != null){
+        enableTrack = res.viewTracking;
         
-        focus = item.settings[1];
+        focus = res.trackElement;
         
-        if (typeof item.settings[2] === "number") {
-            margin = item.settings[2];
+        if (typeof res.margin === "number") {
+            margin = res.margin;
         }
-        console.log(typeof item.settings[2]);
-
-        var tagNames = ['p','li','ul','a','h1','h2','h3','h4','h5','h6','tr','td','th']; //this list of tags needs to match list in options
         tags = '';
-        for (var i = 0; i < tagNames.length; i++) {
-            if (item.settings[i+3] === true) {
-                tags += tagNames[i] + ',';
+        for (var key in res) {
+            if (key != 'margin' && key != 'trackElement' && key != 'viewTracking' && res[key] === true) {
+                tags += key + ',';
             }
         }
         tags = tags.substring(0, tags.length - 1);
-        console.log(margin);
+        console.log(tags);
     }
 }
 
