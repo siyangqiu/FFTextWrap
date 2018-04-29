@@ -23,6 +23,6 @@
       "browser_style": true
     },
 
-    "permissions": ["storage"],
+    "permissions": ["storage"]
     
 }
