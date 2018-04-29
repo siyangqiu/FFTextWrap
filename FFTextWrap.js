@@ -1,48 +1,76 @@
 "use strict";
 
-//Parameters
-var tags = 'p,li,a,h1,h2,h3,h4,h5,h6,tr,td,th';
+//Default values - Not applicable if values are available in storage;
+var tags = 'p,li,ul,a,h1,h2,h3,h4,h5,h6,tr,td,th';
 var margin = 10;
-var enableTrack = true; //experimental feature to prevent jumping after reflowing text
-var focus = 'top'; //which element to track after zoom (center, top, natural). DEFAULT is top
+var enableTrack = true; 
+var focus = 'top';
 
 //Code Start
 
-var init = function () {
+var init = function () {    //Setup: 1. create style tag for later CSS injection. 2. Read values from storage if available. Otherwise
     var styleNode = document.createElement('style');
     styleNode.type = "text/css";
     styleNode.id = "FFTW";
     document.getElementsByTagName('head')[0].appendChild(styleNode);
+
+    var getSettings = browser.storage.local.get("settings");
+    getSettings.then(onGetSettings, onError);
 };
 
-var resize = function() {
-    if(enableTrack === true && lastDistance > startDistance) {
-        trackPage();
+var resize = function() {   //Call this function to reflow page. 
+    if(enableTrack === true && lastDistance > startDistance) {  //if enableTrack (whether View Tracking is enabled), we need to 1. grab current view 2.Inject CSS 3. Scroll to "current view"
+        getCurrentView();
         document.getElementById('FFTW').innerHTML = tags + '{   max-width: ' + ( window.innerWidth - margin ) + 'px;  }';
         topElement.scrollIntoView();
-    } else {
+    } else { //otherwise, just inject CSS
         document.getElementById('FFTW').innerHTML = tags + '{   max-width: ' + ( window.innerWidth - margin ) + 'px;  }';
     }
 };
 
+function onGetSettings(item) { //After getting settings, override default parameters
+    if (item != null){
+        enableTrack = item.settings[0];
+        
+        focus = item.settings[1];
+        
+        if (typeof item.settings[2] === "number") {
+            margin = item.settings[2];
+        }
+        console.log(typeof item.settings[2]);
+
+        var tagNames = ['p','li','ul','a','h1','h2','h3','h4','h5','h6','tr','td','th']; //this list of tags needs to match list in options
+        tags = '';
+        for (var i = 0; i < tagNames.length; i++) {
+            if (item.settings[i+3] === true) {
+                tags += tagNames[i] + ',';
+            }
+        }
+        tags = tags.substring(0, tags.length - 1);
+        console.log(margin);
+    }
+}
+
+function onError(error) {
+    console.log(`Error: ${error}`);
+}
+
 //Runtime
 
-init();
+init(); //call initial setup code
 
-document.addEventListener('touchend', function(event) {
+document.addEventListener('touchend', function(event) { //add listener for when the user ends the pinch to zoom (i.e. when the user drops down to 1 finger on the screen). Fire resize event
     if(event.touches.length == 1) {
         resize();
     }
 }, false);
 
-//Optional features
-
-if(enableTrack === true) {
+if(enableTrack === true) {  //if enableTrack (whether View Tracking is enabled), additional code is needed: 1. function for getting the element to track. 2. whether the user zoomed in or out via start distance and end distance
     var topElement;
     var startDistance;
     var lastDistance;
 
-    var trackPage = function() {
+    var getCurrentView = function() {   //function for determining the element to track after zoom
         if(focus == 'center') {
             topElement = document.elementFromPoint(window.innerWidth/2,window.innerHeight/2);
         } else if (focus == 'natural'){
@@ -52,13 +80,13 @@ if(enableTrack === true) {
         }
     };
 
-    document.addEventListener('touchstart', function(event) {
+    document.addEventListener('touchstart', function(event) {   //add listener to determine start distance
         if(event.touches.length == 2) {
             startDistance = Math.hypot(event.touches[0].pageX-event.touches[1].pageX,event.touches[0].pageY-event.touches[1].pageY);
         }
     }, false);
 
-    document.addEventListener('touchmove', function(event) {
+    document.addEventListener('touchmove', function(event) {    //add listener to determine end distance
         if(event.touches.length == 2) {
             lastDistance = Math.hypot(event.touches[0].pageX-event.touches[1].pageX,event.touches[0].pageY-event.touches[1].pageY);
         }
