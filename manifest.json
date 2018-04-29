@@ -25,9 +25,4 @@
 
     "permissions": ["storage"],
     
-    "applications": {
-      "gecko": {
-      "id": "siyangqiu@firefox"
-      }
-  }
 }
