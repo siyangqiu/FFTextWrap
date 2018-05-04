@@ -23,6 +23,12 @@
       "browser_style": true
     },
 
-    "permissions": ["storage"]
+    "permissions": ["storage"],
     
+    "applications": {
+      "gecko": {
+      "id": "firefox@siyangqiu"
+      }
+    }
+
 }

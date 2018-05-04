@@ -1,17 +1,18 @@
-"use strict";
+'use strict';
 
 //Default values - Not applicable if values are available in storage;
-var tags = 'p,li,ul,a,h1,h2,h3,h4,h5,h6,tr,td,th';
+var tags = 'p,li,ul,a,h1,h2,h3,h4,h5,h6,tr,td,th,label';
 var margin = 10;
 var enableTrack = true; 
-var focus = 'top';
+var focus = 'center';
+const delay = 1;
 
 //Code Start
 
 var init = function () {    //Setup: 1. create style tag for later CSS injection. 2. Read values from storage if available. Otherwise
     var styleNode = document.createElement('style');
-    styleNode.type = "text/css";
-    styleNode.id = "FFTW";
+    styleNode.type = 'text/css';
+    styleNode.id = 'FFTW';
     document.getElementsByTagName('head')[0].appendChild(styleNode);
 
     var getSettings = browser.storage.local.get(['viewTracking','trackLocation','margin','p','li','ul','a','h1','h2','h3','h4','h5','h6','tr','td','th']);
@@ -19,13 +20,15 @@ var init = function () {    //Setup: 1. create style tag for later CSS injection
 };
 
 var resize = function() {   //Call this function to reflow page. 
-    if(enableTrack === true && lastDistance > startDistance) {  //if enableTrack (whether View Tracking is enabled), we need to 1. grab current view 2.Inject CSS 3. Scroll to "current view"
-        getCurrentView();
-        document.getElementById('FFTW').innerHTML = tags + '{   max-width: ' + ( window.innerWidth - margin ) + 'px;  }';
-        topElement.scrollIntoView();
-    } else { //otherwise, just inject CSS
-        document.getElementById('FFTW').innerHTML = tags + '{   max-width: ' + ( window.innerWidth - margin ) + 'px;  }';
-    }
+    setTimeout(function(){  //Give browser chance to recompute window.innerWidth before resizing
+        if(enableTrack === true && lastDistance > startDistance) {  //if enableTrack (whether View Tracking is enabled), we need to 1. grab current view 2.Inject CSS 3. Scroll to 'current view'
+            getCurrentView();
+            document.getElementById('FFTW').innerHTML = tags + '{   max-width: ' + ( window.innerWidth - margin ) + 'px;  }';
+            topElement.scrollIntoView();
+        } else { //otherwise, just inject CSS
+            document.getElementById('FFTW').innerHTML = tags + '{   max-width: ' + ( window.innerWidth - margin ) + 'px;  }';
+        }
+    },delay);
 };
 
 function onGetSettings(res) { //After getting settings, override default parameters
@@ -34,7 +37,7 @@ function onGetSettings(res) { //After getting settings, override default paramet
         
         focus = res.trackElement;
         
-        if (typeof res.margin === "number") {
+        if (typeof res.margin === 'number') {
             margin = res.margin;
         }
         tags = '';
@@ -44,7 +47,6 @@ function onGetSettings(res) { //After getting settings, override default paramet
             }
         }
         tags = tags.substring(0, tags.length - 1);
-        console.log(tags);
     }
 }
 
@@ -87,7 +89,6 @@ if(enableTrack === true) {  //if enableTrack (whether View Tracking is enabled),
         if(event.touches.length == 2) {
             lastDistance = Math.hypot(event.touches[0].pageX-event.touches[1].pageX,event.touches[0].pageY-event.touches[1].pageY);
         }
-        
     }, false);
 }
 
@@ -95,6 +96,6 @@ if(enableTrack === true) {  //if enableTrack (whether View Tracking is enabled),
 
 //For debugging on desktop where there are no Touch Events. 
 // document.addEventListener('click', function (event) {
-//     console.log("click");
+//     console.log('click');
 //     resize();
 // }, false);

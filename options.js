@@ -25,7 +25,7 @@ function restoreOptions() {
     gettingItem.then(onGetSettings,onError);
     function onGetSettings(res) {
         document.querySelector("#ViewTracking").checked = res.viewTracking || true;
-        document.querySelector("#TrackElement").value = res.trackElement || 'top';
+        document.querySelector("#TrackElement").value = res.trackElement || 'center';
         document.querySelector("#Margin").value = res.margin || 10;
         document.querySelector("#p").checked = res.p || true;
         document.querySelector("#li").checked = res.li || true;
