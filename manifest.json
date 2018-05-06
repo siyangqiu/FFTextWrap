@@ -2,7 +2,11 @@
 
     "manifest_version": 2,
     "name": "Fennec TextWrap",
+<<<<<<< HEAD
     "version": "1.2.2",
+=======
+    "version": "1.2.3",
+>>>>>>> development
   
     "description": "Adds text wrap/reflow to Firefox on Android. Reflows the whole page - just pinch to zoom!",
     "homepage_url": "https://github.com/siyangqiu/FFTextWrap",
@@ -24,5 +28,5 @@
     },
 
     "permissions": ["storage"]
-
+    
 }

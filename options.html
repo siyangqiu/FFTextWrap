@@ -7,24 +7,48 @@
 
   <body>
     <form>
-        <label>Enable View Tracking <input type="checkbox" id="ViewTracking" ><sub>Attempt to keep contents in view after zoom? This will take the page element at the <i>Tracking Location</i> and keep it at the top-left after zooming.</sub></label>
+        <label>Enable View Tracking 
+          <input type="checkbox" id="ViewTracking" >
+          <br>
+          <sub>Attempt to keep contents in view after zoom? This will take the page element at the <i>Tracking Location</i> and keep it in view after zooming.</sub>
+        </label>
         <br>
         <br>
-        <label>Tracking Location <select id="TrackElement">
+        <label>Tracking Location 
+          <select id="TrackElement">
             <option value="top">Top</option>
             <option value="center">Center</option>
             <option value="natural">"Natural"</option>
-        </select> <sub>Determines which part of your screen <i>View Tracking</i> will try to put at the top-left of your screen following the zoom.</sub></label>
+          </select> 
+          <br>
+          <sub>Determines which part of your screen <i>View Tracking</i> will try to keep on your screen following the zoom.</sub>
+        </label>
         <br>
         <br>
-        <label>Margin Size: <input type="number" id="Margin" step="5" >px. <sub>Additional margin in pixels to add to the side. NOTE: all values other than numbers will be ignored</sub></label>
+        <label>Margin Size: 
+          <input type="number" id="Margin" step="5" >px. 
+          <br>
+          <sub>Additional margin in pixels to add to the side. NOTE: all values other than numbers will be ignored</sub>
+        </label>
         <br>
         <br>
         <label>Enabled for the following tags:</label>
         <br>
-        <label>p <input type="checkbox" id="p" ></label><label>li <input type="checkbox" id="li" ></label><label>ul <input type="checkbox" id="ul" ></label><label>a <input type="checkbox" id="a" ></label><label>h1 <input type="checkbox" id="h1" ></label><label>h2 <input type="checkbox" id="h2" ></label><label>h3 <input type="checkbox" id="h3" ></label><label>h4 <input type="checkbox" id="h4" ></label><label>h5 <input type="checkbox" id="h5" ></label><label>h6 <input type="checkbox" id="h6" ></label><label>tr <input type="checkbox" id="tr" ></label><label>td <input type="checkbox" id="td" ></label><label>th <input type="checkbox" id="th" ></label>
+        <label>p <input type="checkbox" id="p" ></label>
+        <label>li <input type="checkbox" id="li" ></label>
+        <label>ul <input type="checkbox" id="ul" ></label>
+        <label>a <input type="checkbox" id="a" ></label>
+        <label>h1 <input type="checkbox" id="h1" ></label>
+        <label>h2 <input type="checkbox" id="h2" ></label>
+        <label>h3 <input type="checkbox" id="h3" ></label>
+        <label>h4 <input type="checkbox" id="h4" ></label>
+        <label>h5 <input type="checkbox" id="h5" ></label>
+        <label>h6 <input type="checkbox" id="h6" ></label>
+        <label>tr <input type="checkbox" id="tr" ></label>
+        <label>td <input type="checkbox" id="td" ></label>
+        <label>th <input type="checkbox" id="th" ></label>
         <br>
-        <button type="submit">Save</button> 
+        <h3 id="saved" style="opacity: 0;">Saved!</h3> 
     </form>
 
     <script src="options.js"></script>

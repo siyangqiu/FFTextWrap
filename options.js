@@ -18,7 +18,11 @@ function saveOptions(e) {
         td: document.querySelector("#td").checked,
         th: document.querySelector("#th").checked
     });
-  }
+    document.querySelector("#saved").style = 'text-align: center; border: 1px solid #c3e6cb; background-color: #d4edda; border-radius: .25rem; opacity:100;';
+    setTimeout(function(){
+        document.querySelector("#saved").style = 'text-align: center; border: 1px solid #c3e6cb; background-color: #d4edda; border-radius: .25rem; opacity:0;-moz-transition: opacity 2s ease-in-out;';
+    }, 1);
+}
   
 function restoreOptions() {
     var gettingItem = browser.storage.local.get(['viewTracking','trackElement','margin','p','li','ul','a','h1','h2','h3','h4','h5','h6','tr','td','th']);
@@ -47,4 +51,4 @@ function restoreOptions() {
 }
   
   document.addEventListener("DOMContentLoaded", restoreOptions);
-  document.querySelector("form").addEventListener("submit", saveOptions); 
+  document.querySelector("form").addEventListener("change", saveOptions); 
