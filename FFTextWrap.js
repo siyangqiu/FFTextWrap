@@ -20,7 +20,6 @@ var init = function () {
 
     var getSettings = browser.storage.local.get(['viewTracking', 'trackLocation', 'margin', 'p', 'li', 'ul', 'a', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'tr', 'td', 'th']);
     getSettings.then(onGetSettings, onError);
-    console.log('gotsettings');
 };
 
 //Call this function to reflow page.
@@ -108,7 +107,7 @@ if (enableTrack === true) {
 //Debugging
 
 //For debugging on desktop where there are no Touch Events. 
-document.addEventListener('click', function (event) {
-    console.log('click');
-    resize();
-}, false);
+// document.addEventListener('click', function (event) {
+//     console.log('click');
+//     resize();
+// }, false);
