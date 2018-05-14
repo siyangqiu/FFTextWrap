@@ -7,7 +7,7 @@ var enableTrack = true;
 var focus = 'center';
 
 //Parameters
-const delay = 1;
+const delay = 3;
 
 //Functions "Library"
 
@@ -70,7 +70,7 @@ document.addEventListener('touchend', function (event) {
     if (event.touches.length == 1) {
         resize();
     }
-}, false);
+}, {passive: true, capture: false});
 
 //if enableTrack (whether View Tracking is enabled), additional code is needed: 1. function for getting the element to track. 2. whether the user zoomed in or out via start distance and end distance
 if (enableTrack === true) { 
@@ -94,14 +94,14 @@ if (enableTrack === true) {
         if (event.touches.length === 2) {
             startDistance = Math.hypot(event.touches[0].pageX - event.touches[1].pageX, event.touches[0].pageY - event.touches[1].pageY);
         }
-    }, false);
+    }, {passive: true, capture: false});
 
     //add listener to determine end distance
     document.addEventListener('touchmove', function (event) { 
         if (event.touches.length === 2) {
             lastDistance = Math.hypot(event.touches[0].pageX - event.touches[1].pageX, event.touches[0].pageY - event.touches[1].pageY);
         }
-    }, false);
+    }, {passive: true, capture: false});
 }
 
 //Debugging
