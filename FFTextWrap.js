@@ -10,6 +10,11 @@ var doubleTapZoom = true;
 //Parameters
 const delay = 3;
 
+//Variable Declarations
+var topElement;
+var startDistance;
+var lastDistance;
+
 //Functions "Library"
 
 //Setup: 1. create style tag for later CSS injection. 2. Read values from storage if available.
@@ -21,20 +26,29 @@ var init = function () {
 
     var getSettings = browser.storage.local.get(['viewTracking', 'trackElement', 'tapZoom', 'margin', 'p', 'li', 'ul', 'a', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'tr', 'td', 'th']);
     getSettings.then(onGetSettings, onError);
+
 };
 
 //Call this function to reflow page.
-var resize = function () {
+var reflow = function () {
     //Give browser chance to recompute window.innerWidth before resizing 
-    setTimeout(function () {
-        if (enableTrack === true && lastDistance > startDistance) {
-            getCurrentView();
+    if (enableTrack === true && lastDistance > startDistance) {
+        if (focus === 'center') {
+            topElement = document.elementFromPoint(window.innerWidth / 2, window.innerHeight / 2);
+        } else if (focus === 'natural') {
+            topElement = document.elementFromPoint(20, 20);
+        } else {
+            topElement = document.elementFromPoint(0, 0);
+        }
+        setTimeout(function () {
             document.getElementById('FFTW').innerHTML = tags + '{   max-width: ' + (window.innerWidth - margin) + 'px;  }';
             topElement.scrollIntoView();
-        } else {
+        }, delay);
+    } else {
+        setTimeout(function () {
             document.getElementById('FFTW').innerHTML = tags + '{   max-width: ' + (window.innerWidth - margin) + 'px;  }';
-        }
-    }, delay);
+        }, delay);
+    }
 };
 
 //After getting settings, override default parameters
@@ -57,6 +71,9 @@ var onGetSettings = function (settings) {
         }
         tags = tags.substring(0, tags.length - 1);
     }
+    if (doubleTapZoom === true) {
+        tapZoom();
+    }
 }
 
 var onError = function (error) {
@@ -68,27 +85,46 @@ var onError = function (error) {
 //call initial setup code
 init();
 
-//add listener for when the user ends the pinch to zoom (i.e. when the user drops down to 1 finger on the screen). Fire resize event
+//add listener for when the user ends the pinch to zoom (i.e. when the user drops down to 1 finger on the screen). Fire reflow event
 document.addEventListener('touchend', function (event) {
     if (event.touches.length == 1) {
-        resize();
+        reflow();
     }
 }, {
     passive: true,
     capture: false
 });
 
-//listen for double tap drag
-if (doubleTapZoom === true) {
-    let lastTap = 0;
-    let doubleTap = false;
+//add listener to determine start distance
+document.addEventListener('touchstart', function (event) {
+    if (event.touches.length === 2) {
+        startDistance = Math.hypot(event.touches[0].pageX - event.touches[1].pageX, event.touches[0].pageY - event.touches[1].pageY);
+    }
+}, {
+    passive: true,
+    capture: false
+});
+
+//add listener to determine end distance
+document.addEventListener('touchmove', function (event) {
+    if (event.touches.length === 2) {
+        lastDistance = Math.hypot(event.touches[0].pageX - event.touches[1].pageX, event.touches[0].pageY - event.touches[1].pageY);
+    }
+}, {
+    passive: true,
+    capture: false
+});
+
+function tapZoom() {
+    var lastTap = 0;
+    var doubleTap = false;
     document.addEventListener('touchend', function (event) {
         if (event.touches.length == 0) {
             lastTap = new Date().getTime();
         }
         if (event.touches.length == 0 && doubleTap == true) {
             doubleTap = false;
-            resize();
+            reflow();
         }
     }, {
         passive: true,
@@ -105,48 +141,10 @@ if (doubleTapZoom === true) {
     });
 }
 
-//if enableTrack (whether View Tracking is enabled), additional code is needed: 1. function for getting the element to track. 2. whether the user zoomed in or out via start distance and end distance
-if (enableTrack === true) {
-    var topElement;
-    var startDistance;
-    var lastDistance;
-
-    //function for determining the element to track after zoom
-    var getCurrentView = function () {
-        if (focus === 'center') {
-            topElement = document.elementFromPoint(window.innerWidth / 2, window.innerHeight / 2);
-        } else if (focus === 'natural') {
-            topElement = document.elementFromPoint(20, 20);
-        } else {
-            topElement = document.elementFromPoint(0, 0);
-        }
-    };
-
-    //add listener to determine start distance
-    document.addEventListener('touchstart', function (event) {
-        if (event.touches.length === 2) {
-            startDistance = Math.hypot(event.touches[0].pageX - event.touches[1].pageX, event.touches[0].pageY - event.touches[1].pageY);
-        }
-    }, {
-        passive: true,
-        capture: false
-    });
-
-    //add listener to determine end distance
-    document.addEventListener('touchmove', function (event) {
-        if (event.touches.length === 2) {
-            lastDistance = Math.hypot(event.touches[0].pageX - event.touches[1].pageX, event.touches[0].pageY - event.touches[1].pageY);
-        }
-    }, {
-        passive: true,
-        capture: false
-    });
-}
-
 //Debugging
 
 //For debugging on desktop where there are no Touch Events. 
 // document.addEventListener('click', function (event) {
 //     console.log('click');
-//     resize();
+//     reflow();
 // }, false);
